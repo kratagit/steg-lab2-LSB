@@ -1,8 +1,6 @@
 import numpy as np
 from PIL import Image
 import math
-import io
-import os
 
 class SteganographyLSB:
     """
@@ -89,11 +87,12 @@ class SteganographyLSB:
         psnr_value = self.calculate_psnr(img_array, stego_img_array)
         
         return {
-            "status": "Success",
-            "hidden_chars": len(secret_message),
-            "changed_bits": data_length,
-            "psnr_db": psnr_value
-        }
+                    "status": "Success",
+                    "hidden_chars": len(secret_message),
+                    "changed_bits": data_length,
+                    "psnr_db": psnr_value,
+                    "stego_image": stego_image
+                }
 
     def decode(self, stego_image_path: str) -> str:
         """
@@ -129,7 +128,7 @@ if __name__ == "__main__":
     img1_mock.save("test1_cover.png")
     
     img2_mock = Image.fromarray(np.random.randint(0, 256, (1024, 1024, 3), dtype=np.uint8), 'RGB')
-    img2_mock.save("test2_cover.png")
+    img2_mock.save("test2_cover.bmp")
     
     img3_mock = Image.fromarray(np.random.randint(0, 256, (256, 256, 3), dtype=np.uint8), 'RGB')
     img3_mock.save("test3_cover.png")
@@ -147,10 +146,10 @@ if __name__ == "__main__":
     print("==================================================")
     print("[>] Running Test 2: Long message (1000 characters)...")
     msg2 = "A" * 1000
-    stats2 = s.encode("test2_cover.png", msg2, "test2_stego.png")
-    print(f"[-] Input image: test2_cover.png (1024x1024)")
+    stats2 = s.encode("test2_cover.bmp", msg2, "test2_stego.bmp")
+    print(f"[-] Input image: test2_cover.bmp (1024x1024)")
     print(f"[-] Dynamically generated message (string of 1000x'A')")
-    print(f"[+] Saved to: test2_stego.png")
+    print(f"[+] Saved to: test2_stego.bmp")
     print(f"[+] Measured PSNR ratio: {stats2['psnr_db']:.2f} dB")
 
     print("==================================================")
